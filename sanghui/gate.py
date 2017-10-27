@@ -4,7 +4,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
@@ -25,7 +25,7 @@ def login():
         login()
 
 
-# 填写端口配置
+# 填写端口配置, 	IP->Tel路由 添加
 def port_config(id, number):
     try:
         browser.get('http://{0}/6-1-1portmodify.php?id={1}'.format(BASE_IP, id))
