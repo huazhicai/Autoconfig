@@ -10,7 +10,7 @@ from time import sleep
 
 browser = webdriver.Chrome()
 browser.maximize_window()
-wait = WebDriverWait(browser, 60)
+wait = WebDriverWait(browser, 80)
 
 
 def register():
@@ -105,6 +105,11 @@ def edit_user():
         )
         input2.clear()
         input2.send_keys(AI_NUM)
+        # 过期时间
+        input = wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#ex_time'))
+        )
+        input.clear()
         # Aim Sn
         input3 = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#aim_sn'))
@@ -119,9 +124,10 @@ def edit_user():
         # 保存
         submit4 = wait.until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR,
-                                            'body > div.container > form > div:nth-child(38) > div > input.btn.btn-primary'))
+                                            'body > div.container > form > div:nth-child(39) > div > input.btn.btn-primary'))
         )
         submit4.click()
+
 
         # ai组配置
         submit5 = wait.until(
@@ -162,12 +168,13 @@ def add_money():
         )
         input.clear()
         input.send_keys(Plusmoney)
-        # 保存
-        submit2 = wait.until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR,
-                                            'body > div.container > form > div:nth-child(12) > div > input.btn.btn-primary'))
-        )
-        submit2.click()
+        input.send_keys(Keys.ENTER)
+        # # 保存
+        # submit2 = wait.until(
+        #         EC.element_to_be_clickable((By.CSS_SELECTOR,
+        #                                     'body > div.container > form > div:nth-child(12) > div > input.btn.btn-primary'))
+        # )
+        # submit2.click()
         print('充值成功{}'.format(Plusmoney))
     except TimeoutException:
         print('充值失败')
@@ -188,15 +195,19 @@ def create_mobile(number):
                 EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_mowner > a'))
         )
         submit1.click()
-        input2 = wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#s2id_autogen1_search'))
-        )
-        input2.send_keys(USERNAME)
+        try:
+            input2 = wait.until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '#s2id_autogen1_search'))
+            )
+            input2.send_keys(USERNAME)
+        except:
+            input2 = browser.find_element_by_css_selector('#s2id_autogen2_search')
+            input2.send_keys(USERNAME)
         input2.send_keys(Keys.ENTER)
         # 保存
         submit = wait.until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR,
-                                            'body > div.container > form > div:nth-child(9) > div > input.btn.btn-primary'))
+                                            'body > div.container > form > div:nth-child(12) > div > input.btn.btn-primary'))
         )
         submit.click()
         print('移动主叫创建成功{}'.format(phone))
@@ -207,7 +218,7 @@ def create_mobile(number):
 
 def main():
     # 注册账号
-    # register()
+    register()
     # 认证
     admin_login()
     edit_user()
@@ -226,3 +237,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+

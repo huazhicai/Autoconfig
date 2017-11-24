@@ -71,7 +71,7 @@ def port_config(number):
         print('配置成功{}'.format(number))
         # 添加
         submit3 = wait.until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, '#Add'))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '#Add'))
         )
         submit3.click()
     except TimeoutException:
@@ -101,9 +101,20 @@ def net_config():
                 EC.element_to_be_clickable((By.CSS_SELECTOR, '#ok'))
         )
         submit.click()
+        print(IP, GATEWAY)
 
     except TimeoutException:
         net_config()
+
+
+# 重启设备使配置生效
+def restart():
+    browser.get('http://{}/Restart.htm'.format(BASE_IP))
+    browser.find_element_by_id('reboot').click()
+    # 弹出框确定
+    a1 = browser.switch_to.alert
+    sleep(1)
+    a1.accept()
 
 
 def main():
@@ -113,8 +124,9 @@ def main():
         port_config(str(num))
     # 修改IP路由
     net_config()
-    sleep(3)
-    browser.close()
+    sleep(0.5)
+    restart()
+    # browser.close()
 
 
 if __name__ == '__main__':

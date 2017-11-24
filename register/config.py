@@ -27,18 +27,43 @@ PHONE = phonenum()
 EMAIL = email()
 
 ADMIN = 'admin'
-ADMIN_PASSWORD = 'sdfsdfls1'
-Plusmoney = '50000.0'
+# ADMIN_PASSWORD = 'sdfsdfls1'
+ADMIN_PASSWORD = 'sdftd11'
+Plusmoney = '320000.0'
 
-# 需要修改
-BASE_URL = 'http://console.lsfhxc.com/'
+# 可能需要修改
+# BASE_URL = 'http://console.lsfhxc.com/'
+# 191服务器
+# PREFIX = '188880342'
+# AIM_SN = '2c4d5446f883'
 
-PREFIX = '188880341'
-AIM_SN = '2c4d5446f883'
+# # 190服务器
+# PREFIX = '188333300'
+# AIM_SN = '123456'
+
 
 # 必须修改每次
-USERNAME = 'hzls_wangpaiyun211'
-INC_NAME = '王牌云财税'
-AI_NUM = '2'
-start = 26
-end = 27
+USERNAME = 'hengyun'
+INC_NAME = 'hengyun'
+AI_NUM = '32'
+start = 1
+end = 4
+
+# 装机测试
+BASE_URL = 'http://27.184.59.195:666/'
+PREFIX = '188888802'
+AIM_SN = '001e67fecc65'
+
+
+# # 可能需要修改(西安)
+# BASE_URL = 'http://xian.synvn.com:666/'
+# PREFIX = '188888802'
+# AIM_SN = 'a4bf0119ef8f'
+
+
+
+#
+# # 可能需要修改(sjz)
+# BASE_URL = 'http://xian.synvn.com:666/'
+# PREFIX = '188888802'
+# AIM_SN = 'a4bf0119ef8f'

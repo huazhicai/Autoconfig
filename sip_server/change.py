@@ -11,7 +11,7 @@ from time import sleep
 browser = webdriver.Chrome()
 # browser.set_window_size(1400, 900)
 browser.maximize_window()
-wait = WebDriverWait(browser, 60)
+wait = WebDriverWait(browser, 80)
 
 
 def login():
@@ -46,21 +46,21 @@ def outbound_route(id, num):
         # https://192.168.11.180/config.php?display=routing&extdisplay=9
         browser.get('https://{0}/config.php?display=routing&extdisplay={1}'.format(BASE_IP, id))
 
-        # Route Name
-        input1 = wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                '#routeEdit > table > tbody > tr:nth-child(2) > td:nth-child(2) > input[type="text"]'))
-        )
-        input1.clear()
-        input1.send_keys(DISPLAY + num)
-
-        # Route CID
-        input2 = wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR,
-                                                '#routeEdit > table > tbody > tr:nth-child(3) > td:nth-child(2) > input[type="text"]:nth-child(1)'))
-        )
-        input2.clear()
-        input2.send_keys(PREFIX + num)
+        # # Route Name
+        # input1 = wait.until(
+        #         EC.presence_of_element_located((By.CSS_SELECTOR,
+        #                                         '#routeEdit > table > tbody > tr:nth-child(2) > td:nth-child(2) > input[type="text"]'))
+        # )
+        # input1.clear()
+        # input1.send_keys(DISPLAY + num)
+        #
+        # # Route CID
+        # input2 = wait.until(
+        #         EC.presence_of_element_located((By.CSS_SELECTOR,
+        #                                         '#routeEdit > table > tbody > tr:nth-child(3) > td:nth-child(2) > input[type="text"]:nth-child(1)'))
+        # )
+        # input2.clear()
+        # input2.send_keys(PREFIX + num)
 
         # Dial route
         input3 = wait.until(
@@ -74,10 +74,10 @@ def outbound_route(id, num):
         )
         input4.clear()
         input4.send_keys(PREFIX + num)
-
-        # 选择中继器
-        sel = Select(browser.find_element_by_id('trunkpri0'))  # 实例化Select
-        sel.select_by_visible_text(TRUNK_NAME)  # 选择中继器
+        #
+        # # 选择中继器
+        # sel = Select(browser.find_element_by_id('trunkpri0'))  # 实例化Select
+        # sel.select_by_visible_text(TRUNK_NAME)  # 选择中继器
 
         # 提交更改#routeEdit > table > tbody > tr:nth-child(24) > td > h6 > input:nth-child(1)
         submit2 = wait.until(
@@ -92,10 +92,11 @@ def outbound_route(id, num):
 
 def main():
     login()
-    #配置分机和呼出路由
-    for i in range(start, end+1):
+    # 配置分机和呼出路由
+    for i in range(1, 33):
         if i < 10:
             j = '0' + str(i)
+            # (id, number)
             outbound_route(i+1, j)
         else:
             outbound_route(i+1, str(i))

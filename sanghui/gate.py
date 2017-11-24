@@ -12,7 +12,7 @@ from sanghui.config import *
 
 browser = webdriver.Chrome()
 browser.maximize_window()
-wait = WebDriverWait(browser, 60)
+wait = WebDriverWait(browser, 80)
 
 
 # 登录网关
@@ -99,7 +99,7 @@ def main():
             number = PREFIX + str(i + 1)
             port_config(id, number)
     # 检查配置
-    sleep(5)
+    sleep(0.5)
     # 网络配置
     net_config()
     browser.quit()

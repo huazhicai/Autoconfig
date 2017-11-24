@@ -5,16 +5,16 @@ EMAIL = '88273531@qq.com'
 
 ADMIN = 'admin'
 ADMIN_PASSWORD = 'sdftd11'
-Plusmoney = '50000.0'
+Plusmoney = '1000.00'
 
 PREFIX = '188888801'
-AIM_SN = '88d7f6d4f8ca'
+AIM_SN = '001e67feccab'
 
 USERNAME = 'admin'
 INC_NAME = '声讯科技'
-AI_NUM = '2'
-start = 31
+AI_NUM = '1'
+start = 32
 end = 32
 
 # 必须修改每次
-BASE_URL = 'http://192.168.11.180:666/'
+BASE_URL = 'http://192.168.1.183:666/'
