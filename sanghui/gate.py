@@ -12,7 +12,7 @@ from sanghui.config import *
 
 browser = webdriver.Chrome()
 browser.maximize_window()
-wait = WebDriverWait(browser, 80)
+wait = WebDriverWait(browser, 90)
 
 
 # 登录网关
@@ -72,6 +72,12 @@ def net_config():
         )
         input2.clear()
         input2.send_keys(GATEWAY)
+        # DNS
+        input3 = wait.until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="Firstdns"]'))
+        )
+        input3.clear()
+        input3.send_keys(DNS)
         # 点击保存
         submit = wait.until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, '#ok'))
@@ -86,6 +92,53 @@ def net_config():
         print('网络配置失败')
 
 
+# 注册网关
+def register():
+    try:
+        browser.get('http://admin:admin@{}/'.format(IP))
+        browser.get('http://{}/9-10snmp.php'.format(IP))
+        # 勾选启用
+        input1 = wait.until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="CheckboxGroup_snmp"]'))
+        )
+        input1.click()
+        # 集中管理服务器地址
+        input2 = wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#snmp_ip'))
+        )
+        input2.clear()
+        input2.send_keys(SERVER_URL)
+        # 公司名
+        input3 = wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#area'))
+        )
+        input3.clear()
+        input3.send_keys(COMPANY)
+        # 授权码
+        input4 = wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#authorCode'))
+        )
+        input4.clear()
+        input4.send_keys(TOKEN)
+        # 网关描述
+        input5 = wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#description'))
+        )
+        input5.clear()
+        input5.send_keys(DESCRIBE)
+        # 保存
+        click = wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#save'))
+        )
+        click.click()
+        a1 = browser.switch_to.alert
+        sleep(1)
+        a1.accept()
+        print('注册成功')
+    except:
+        print("注册失败")
+
+
 def main():
     login()
     # i为id号，非号码后尾数， id从0到31 range(32)
@@ -98,10 +151,9 @@ def main():
         else:
             number = PREFIX + str(i + 1)
             port_config(id, number)
-    # 检查配置
-    sleep(0.5)
     # 网络配置
     net_config()
+    register()
     browser.quit()
 
 

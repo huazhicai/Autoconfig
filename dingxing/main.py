@@ -12,7 +12,7 @@ from dingxing.config import *
 
 browser = webdriver.Chrome()
 browser.maximize_window()
-wait = WebDriverWait(browser, 60)
+wait = WebDriverWait(browser, 90)
 
 
 # 登录网关
@@ -78,6 +78,35 @@ def port_config(number):
         print('配置失败{}'.format(number))
 
 
+# 远程连接配置
+def remoteServer():
+    try:
+        browser.get('http://{}/RemoteServerCfg.htm'.format(BASE_IP))
+        # 启用
+        input1 = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '#RemoteEnable'))
+        )
+        input1.click()
+        # 服务器URL/IP
+        input2 = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '#RemoteAddr'))
+        )
+        input2.send_keys("server02.dmcld.com")
+        # 服务器端口
+        input3 = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '#RemotePort'))
+        )
+        input3.send_keys("3100")
+        # 保存
+        input4 = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '#Save'))
+        )
+        input4.click()
+        print("远程配置成功")
+    except TimeoutException:
+        remoteServer()
+
+
 # 修改网络配置的IP和GATEEAY
 def net_config():
     try:
@@ -122,6 +151,8 @@ def main():
     # 分配号码
     for num in range(start, end + 1):
         port_config(str(num))
+    # 远程连接
+    remoteServer()
     # 修改IP路由
     net_config()
     sleep(0.5)

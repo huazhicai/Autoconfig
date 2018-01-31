@@ -1,3 +1,4 @@
+from datetime import timedelta, datetime
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -10,56 +11,66 @@ from time import sleep
 
 browser = webdriver.Chrome()
 browser.maximize_window()
-wait = WebDriverWait(browser, 80)
+wait = WebDriverWait(browser, 60)
 
 
 def register():
     try:
-        browser.get('{}auth/register'.format(BASE_URL))
-        # 电子邮箱
+        browser.get('{}auth/login?next=%2F'.format(BASE_URL))
+
+        # # 注册协议
         input1 = wait.until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '#login_form > div.cont_form_login > div > span'))
+        )
+        input1.click()
+        sleep(1)
+        # browser.current_window_handle
+        js = "var q=document.getElementById('scrollModal').scrollTop=10000"
+        browser.execute_script(js)
+        js = "var q=document.documentElement.scrollTop=10000"
+        browser.execute_script(js)
+        browser.find_element_by_css_selector("#footAgree > label").click()
+
+        # 电子邮箱
+        input3 = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#email'))
         )
-        input1.send_keys(EMAIL)
+        input3.send_keys(EMAIL)
         # 用户名
-        input2 = wait.until(
+        input4 = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#username'))
         )
-        input2.send_keys(USERNAME)
+        input4.send_keys(USERNAME)
         # 输入秘密
-        input3 = wait.until(
+        input5 = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#password'))
         )
-        input3.send_keys(PASSWORD)
+        input5.send_keys(PASSWORD)
         # 确认秘密
-        input4 = wait.until(
+        input6 = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#password2'))
         )
-        input4.send_keys(PASSWORD)
+        input6.send_keys(PASSWORD)
         # 企业名称
-        input4 = wait.until(
+        input7 = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#inc_name'))
         )
-        input4.send_keys(INC_NAME)
+        input7.send_keys(INC_NAME)
         # 联系电话
-        input5 = wait.until(
+        input8 = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#phone'))
         )
-        input5.send_keys(PHONE)
+        input8.send_keys(PHONE)
         # 注册
         submit = wait.until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, '#reg'))
         )
         submit.click()
-        wait.until(
-                EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, '#login_form > div.alert.control-error.alert-block.alert-success > font'))
-        )
+
         print('注册成功')
-        return True
     except TimeoutException:
         print('注册失败')
-        register()
+        # register()
 
 
 def admin_login():
@@ -67,22 +78,24 @@ def admin_login():
         browser.get('{}auth/login?next=%2F'.format(BASE_URL))
         # 管理员账号
         input1 = wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#email'))
+                EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, '#login_form > div.cont_form_login > input[type="text"]:nth-child(2)'))
         )
         input1.send_keys(ADMIN)
         # 管理员密码
         input2 = wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#password'))
+                EC.presence_of_element_located(
+                        (By.CSS_SELECTOR, '#login_form > div.cont_form_login > input[type="password"]:nth-child(3)'))
         )
         input2.send_keys(ADMIN_PASSWORD)
         # 登录
         submit = wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#login_form > div:nth-child(6) > input'))
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#login_form > div.cont_form_login > button'))
         )
         submit.click()
     except TimeoutException:
         print('登录失败')
-        admin_login()
+        # admin_login()
 
 
 def edit_user():
@@ -105,11 +118,14 @@ def edit_user():
         )
         input2.clear()
         input2.send_keys(AI_NUM)
+
         # 过期时间
-        input = wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#ex_time'))
-        )
-        input.clear()
+        date = datetime.now() + timedelta(days=31)
+        # 时间格式转为字符格式
+        expire_date = date.strftime('%H:%M:%S')
+        browser.find_element_by_id('ex_time').clear()
+        # 遗憾不能输入
+        # browser.find_element_by_id('ex_time').send_keys(expire_date)
         # Aim Sn
         input3 = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, '#aim_sn'))
@@ -118,16 +134,15 @@ def edit_user():
         input3.send_keys(AIM_SN)
         # 邮件确认
         submit3 = wait.until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, '#confirmed'))
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#confirmed'))
         )
         submit3.click()
         # 保存
         submit4 = wait.until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR,
-                                            'body > div.container > form > div:nth-child(39) > div > input.btn.btn-primary'))
+                                            'body > div.container > form > div:nth-child(41) > div > input.btn.btn-primary'))
         )
         submit4.click()
-
 
         # ai组配置
         submit5 = wait.until(
@@ -150,7 +165,7 @@ def edit_user():
         print('认证通过')
     except TimeoutException:
         print('编辑资料失败')
-        edit_user()
+        # edit_user()
 
 
 def add_money():
@@ -171,14 +186,13 @@ def add_money():
         input.send_keys(Keys.ENTER)
         # # 保存
         # submit2 = wait.until(
-        #         EC.element_to_be_clickable((By.CSS_SELECTOR,
-        #                                     'body > div.container > form > div:nth-child(12) > div > input.btn.btn-primary'))
+        #     EC.element_to_be_clickable((By.CSS_SELECTOR, 'body > div.container > form > div:nth-child(12) > div > input.btn.btn-primary'))
         # )
         # submit2.click()
         print('充值成功{}'.format(Plusmoney))
     except TimeoutException:
         print('充值失败')
-        add_money()
+        # add_money()
 
 
 def create_mobile(number):
@@ -195,15 +209,18 @@ def create_mobile(number):
                 EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_mowner > a'))
         )
         submit1.click()
+        # s2id_autogen1_search  #s2id_autogen1_search
         try:
+            input2 = browser.find_element_by_xpath('//*[@id="s2id_autogen1_search"]')
+            input2.send_keys(USERNAME)
+            input2.send_keys(Keys.ENTER)
+        except:
             input2 = wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, '#s2id_autogen1_search'))
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '#s2id_autogen2_search'))
             )
             input2.send_keys(USERNAME)
-        except:
-            input2 = browser.find_element_by_css_selector('#s2id_autogen2_search')
-            input2.send_keys(USERNAME)
-        input2.send_keys(Keys.ENTER)
+            input2.send_keys(Keys.ENTER)
+
         # 保存
         submit = wait.until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR,
@@ -213,12 +230,12 @@ def create_mobile(number):
         print('移动主叫创建成功{}'.format(phone))
     except TimeoutException:
         print('创建移动主叫失败')
-        create_mobile(number)
+        # create_mobile(number)
 
 
 def main():
     # 注册账号
-    register()
+    # register()
     # 认证
     admin_login()
     edit_user()
@@ -237,6 +254,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-

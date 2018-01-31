@@ -5,7 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from sip_server.config import *
+from trunk.config import *
 from time import sleep
 
 browser = webdriver.Chrome()
@@ -70,7 +70,7 @@ def trunk_config():
 
         # 提交更改
         submit = wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#page_body > form > table > tbody > tr:nth-child(27) > td > h6 > input:nth-child(1)'))
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="page_body"]/form/table/tbody/tr[26]/td/h6/input[1]'))
         )
         submit.click()
         a1 = browser.switch_to.alert
