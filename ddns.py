@@ -1,15 +1,18 @@
-
 from aliyunsdkalidns.request.v20150109.DescribeDomainRecordInfoRequest import DescribeDomainRecordInfoRequest
 from aliyunsdkcore import client
 from aliyunsdkalidns.request.v20150109 import DescribeDomainRecordsRequest, UpdateDomainRecordRequest
 import json, re, requests
 import time
+import logging
+
+logging.basicConfig(filename='alidns.log', level=logging.DEBUG, format=
+'%(asctime)s - %(levelname)s - %(message)s')
 
 access_key_id = "LTAI2uCU1NS2Rpk3"
 access_Key_secret = "drMg8quTOTL7L0xDKcA13fcVkc6u1H"
 RegionID = "cn-hangzhou"
 Types = "A"
-current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+# current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 with open('/root/config.json') as f:
     config = json.load(f)
@@ -88,11 +91,11 @@ def main():
     PageSize = result['PageSize']
     while PageSize * PageNumber < TotalCount:
         # 返回第N页域名记录
-        result_2 = check_records('listenrobot.cn', PageNumber+1)
+        result_2 = check_records('listenrobot.cn', PageNumber + 1)
         print(result_2)
         Records += result_2['DomainRecords']['Record']
         PageNumber += 1
-    print(Records)
+    # print(Records)
 
     for item in Records:
         if item['RR'] == HostName and item['Type'] == Types:
@@ -100,7 +103,8 @@ def main():
             oldIP = old_ip(RecordId)
             if oldIP != localIP:
                 update_dns(HostName, RecordId, Types, localIP)
-        else:
+                logging.debug('Current IP is %s ,Old IPAdress is %s,IPAddress has been changed.....' % (localIP, oldIP))
+
 
 if __name__ == '__main__':
     while True:
